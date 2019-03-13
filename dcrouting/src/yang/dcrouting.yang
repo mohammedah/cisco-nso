@@ -1,0 +1,162 @@
+module dcrouting {
+
+  namespace "http://example.com/dcrouting";
+  prefix dcrouting;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import tailf-common {
+    prefix tailf;
+  }
+
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+ container us_datacenters {
+   list dc {
+     key "name";
+     leaf name {
+       type enumeration {
+         enum USTX01;
+         enum USVA01;
+       }
+     }
+     list l3cz_topology {
+       key "name";
+       leaf name {
+         tailf:info "CZXX";
+         type string;
+       }
+       leaf-list leafs {
+         type leafref {
+           tailf:info "how to narrow it down";
+           path "/ncs:devices/ncs:device/ncs:name";
+         }
+       }
+       leaf-list spines {
+         type leafref {
+           tailf:info "how to narrow it down";
+           path "/ncs:devices/ncs:device/ncs:name";
+         }
+       }
+
+       container connections {
+         list leaf_sw {
+           key "name";
+           leaf name {
+             mandatory true;
+             type leafref {
+               path "../../../leafs";
+             }
+           }
+           list uplinks {
+             key "uplink-id";
+             leaf uplink-id {
+               mandatory true;
+               type uint8 {
+                 range "1..4";
+               }
+             }
+             leaf leaf_interface {
+               mandatory true;
+               type string;
+             }
+             leaf spine_sw {
+               mandatory true;
+               type leafref {
+                 path "../../../../spines";
+               }
+              }
+              leaf spine_interface {
+                mandatory true;
+                type string;
+              }
+              leaf uplink_subnet {
+                tailf:info "point to point link network add";
+                type tailf:ipv4-address-and-prefix-length;
+              }
+           }
+         }
+       }
+     }
+   }
+  }
+
+  container routing {
+
+    list dcrouting {
+      description "bgp routing";
+      key name;
+      leaf name {
+        tailf:info "Unique service id";
+        tailf:cli-allow-range;
+        description "service name";
+        type string;
+      }
+
+      uses ncs:service-data;
+      ncs:servicepoint dcrouting-servicepoint;
+
+      leaf dc {
+        type leafref {
+          path "/dcrouting:us_datacenters/dc/name";
+        }
+      }
+      leaf cz {
+        type leafref {
+          path "deref(../dc)/../l3cz_topology/name";
+        }
+      }
+      leaf spine_as {
+        description "bgp as# for spines";
+        mandatory true;
+        type uint32;
+      }
+      list primary_leaf {
+        key name;
+        leaf name {
+          mandatory true;
+          type leafref {
+            path "deref(../../cz)/../leafs";
+          }
+        }
+        leaf primary_loopback0 {
+          description "ip/prefix";
+          mandatory true;
+          type tailf:ipv4-address-and-prefix-length;
+        }
+        leaf as_number {
+          description "bgp as# for this and peer leaf";
+          mandatory true;
+          type uint32;
+        }
+        leaf peer_leaf {
+          mandatory true;
+          type leafref {
+            path "deref(../../cz)/../leafs";
+          }
+          must "current() != ../name" {
+            error-message "peer must be different from primary";
+          }
+        }
+        leaf peer_loopback0 {
+          description "ip/prefix";
+          mandatory true;
+          type tailf:ipv4-address-and-prefix-length;
+        }
+        leaf ibgp_subnet {
+          description "ptp subnet for ibgp peering";
+          mandatory true;
+          type tailf:ipv4-address-and-prefix-length;
+        }
+        leaf-list leaf_subnets {
+          description "subnets to be redistributed into bgp";
+          type tailf:ipv4-address-and-prefix-length;
+       }
+     }
+   }
+ }
+}
