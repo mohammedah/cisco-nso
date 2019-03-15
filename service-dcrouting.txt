@@ -1,0 +1,13 @@
+routing dcrouting AppH-Cisc
+ dc       USTX01
+ cz       CZ06
+ spine_as 10
+ primary_leaf LEAF01
+  primary_loopback0 10.10.10.6/32
+  as_number         200
+  peer_leaf         LEAF02
+  peer_loopback0    10.10.10.7/32
+  ibgp_subnet       10.10.20.18/31
+  leaf_subnets      [ 30.30.30.0/24 30.30.40.0/24 ]
+ !
+!

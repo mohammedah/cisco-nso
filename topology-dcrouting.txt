@@ -1,0 +1,66 @@
+us_datacenters dc USTX01
+ l3cz_topology CZ06
+  leafs  [ Arista-Leaf01 Arista-Leaf02 LEAF01 LEAF02 ]
+  spines [ SPINE01 SPINE02 ]
+  connections leaf_sw Arista-Leaf01
+   uplinks 1
+    leaf_interface  2
+    spine_sw        SPINE01
+    spine_interface 1/6
+    uplink_subnet   10.10.20.10/31
+   !
+   uplinks 2
+    leaf_interface  1
+    spine_sw        SPINE02
+    spine_interface 1/3
+    uplink_subnet   10.10.20.12/31
+   !
+  !
+  connections leaf_sw Arista-Leaf02
+   uplinks 1
+    leaf_interface  3
+    spine_sw        SPINE01
+    spine_interface 1/5
+    uplink_subnet   10.10.20.14/31
+   !
+   uplinks 2
+    leaf_interface  2
+    spine_sw        SPINE02
+    spine_interface 1/4
+    uplink_subnet   10.10.20.16/31
+   !
+  !
+  connections leaf_sw LEAF01
+   uplinks 1
+    leaf_interface  1/1
+    spine_sw        SPINE01
+    spine_interface 1/3
+    uplink_subnet   10.10.20.0/31
+   !
+   uplinks 2
+    leaf_interface  1/3
+    spine_sw        SPINE02
+    spine_interface 1/5
+    uplink_subnet   10.10.20.2/31
+   !
+  !
+  connections leaf_sw LEAF02
+   uplinks 1
+    leaf_interface  1/2
+    spine_sw        SPINE01
+    spine_interface 1/4
+    uplink_subnet   10.10.20.4/31
+   !
+   uplinks 2
+    leaf_interface  1/3
+    spine_sw        SPINE02
+    spine_interface 1/6
+    uplink_subnet   10.10.20.6/31
+   !
+  !
+ !
+ l3cz_topology CZ11
+ !
+!
+us_datacenters dc USVA01
+!
