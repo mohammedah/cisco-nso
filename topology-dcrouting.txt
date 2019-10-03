@@ -5,13 +5,13 @@ us_datacenters dc USTX01
   connections leaf_sw Arista-Leaf01
    uplinks 1
     leaf_interface  2
-    spine_sw        SPINE01
+    spine_sw        SPINE03
     spine_interface 1/6
     uplink_subnet   10.10.20.10/31
    !
    uplinks 2
     leaf_interface  1
-    spine_sw        SPINE02
+    spine_sw        SPINE04
     spine_interface 1/3
     uplink_subnet   10.10.20.12/31
    !
