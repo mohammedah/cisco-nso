@@ -17,5 +17,13 @@ pipeline {
                 echo 'Building dev'
             }
         }
+        stage('Build JJ') {
+            when {
+                branch 'jj-jenkins'
+            }
+            steps {
+                echo 'Building dev'
+            }
+        }
     }
 }
