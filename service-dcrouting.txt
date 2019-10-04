@@ -1,5 +1,5 @@
 routing dcrouting AppH-Cisc
- dc       USTX01
+ dc       USTX02
  cz       CZ06
  spine_as 10
  primary_leaf LEAF01
