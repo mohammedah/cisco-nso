@@ -1,5 +1,12 @@
 routing dcrouting AppH-Cisc
+<<<<<<< HEAD
  dc       USTX02
+=======
+ dc       USTX01
+Cwcwscsdcsd
+B
+
+>>>>>>> 2d58acc96d00b0ae814f4f6f49e126530d7d3e49
  cz       CZ06
  spine_as 10
  primary_leaf LEAF01
